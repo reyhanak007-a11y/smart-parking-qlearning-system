@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Eksperimen Hiperparameter - Sistem Parkir Otomatis{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Eksperimen Hiperparameter: Discount Factor (γ)</h1>
+
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+        <h2 class="h4 mb-0">Perbandingan Kebijakan Optimal</h2>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-info text-white">
+                        <h3 class="h5 mb-0">γ = 0.1 (Rendah)</h3>
+                    </div>
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <i class="bi bi-graph-up fs-1 text-info"></i>
+                        </div>
+                        <img src="/static/img/policy_visualization_0101_gamma01.png" class="img-fluid rounded" alt="Kebijakan γ=0.1">
+                        <p class="mt-3 text-muted">Agen dengan γ=0.1 hanya mempertimbangkan reward instan dan cenderung mengambil keputusan yang tidak optimal untuk jangka panjang.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-success text-white">
+                        <h3 class="h5 mb-0">γ = 0.9 (Tinggi)</h3>
+                    </div>
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <i class="bi bi-graph-up fs-1 text-success"></i>
+                        </div>
+                        <img src="/static/img/policy_visualization_0111_gamma09.png" class="img-fluid rounded" alt="Kebijakan γ=0.9">
+                        <p class="mt-3 text-muted">Agen dengan γ=0.9 mempertimbangkan reward masa depan dan menghasilkan kebijakan yang lebih konsisten untuk mencapai tujuan.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+        <h2 class="h4 mb-0">Perbandingan Kurva Pembelajaran</h2>
+    </div>
+    <div class="card-body text-center">
+        <img src="/static/img/{{ plot_path }}" class="img-fluid rounded" alt="Perbandingan Kurva Pembelajaran">
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header bg-warning">
+        <h2 class="h4 mb-0">Analisis Hasil Eksperimen</h2>
+    </div>
+    <div class="card-body">
+        <h3 class="mb-3">Perbedaan Kebijakan</h3>
+        <p>Perbandingan visualisasi kebijakan menunjukkan perbedaan signifikan dalam strategi navigasi:</p>
+        <ul class="mb-4">
+            <li><strong>γ = 0.1 (Rendah):</strong> Kebijakan cenderung acak dan tidak konsisten karena agen hanya fokus pada reward instan tanpa mempertimbangkan konsekuensi jangka panjang.</li>
+            <li><strong>γ = 0.9 (Tinggi):</strong> Kebijakan menunjukkan pola yang terstruktur dan logis, dengan arah gerakan yang mengarah ke slot parkir kosong terdekat secara efisien.</li>
+        </ul>
+        
+        <h3 class="mb-3">Interpretasi Kurva Pembelajaran</h3>
+        <p>Kurva pembelajaran mengonfirmasi pengamatan visual:</p>
+        <ul class="mb-4">
+            <li><strong>γ = 0.9:</strong> Kurva lebih stabil dengan konvergensi lebih cepat (sekitar episode 400) dan reward akhir lebih tinggi (~7.5). Ini menunjukkan agen berhasil belajar strategi optimal yang konsisten.</li>
+            <li><strong>γ = 0.1:</strong> Kurva lebih fluktuatif dengan konvergensi lebih lambat (melebihi episode 700) dan reward akhir lebih rendah (~5.2). Fluktuasi tinggi mengindikasikan ketidakstabilan dalam pembelajaran akibat fokus pada reward instan.</li>
+        </ul>
+        
+        <div class="alert alert-success">
+            <strong>Kesimpulan:</strong> Discount factor (γ) yang lebih tinggi (0.9) menghasilkan pembelajaran yang lebih stabil dan kebijakan optimal yang lebih efisien. Nilai γ yang terlalu rendah (0.1) membuat agen "miopik" (hanya melihat jangka pendek) sehingga kesulitan mengembangkan strategi jangka panjang yang diperlukan untuk navigasi efisien ke slot parkir.
+        </div>
+        
+        <div class="mt-4 text-center">
+            <a href="/" class="btn btn-secondary me-2">
+                <i class="bi bi-house me-1"></i>Kembali ke Beranda
+            </a>
+            <a href="/train" class="btn btn-primary">
+                <i class="bi bi-gear me-1"></i>Eksperimen dengan Parameter Lain
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

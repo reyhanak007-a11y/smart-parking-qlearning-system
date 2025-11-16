@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}Demonstrasi - Sistem Parkir Otomatis{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Demonstrasi Parkir Otomatis</h1>
+
+{% if error %}
+<div class="alert alert-danger">
+    <i class="bi bi-exclamation-triangle me-2"></i>{{ error }}
+    <div class="mt-3">
+        <a href="/train" class="btn btn-primary">
+            <i class="bi bi-arrow-left me-1"></i>Kembali ke Pelatihan Model
+        </a>
+    </div>
+</div>
+{% else %}
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+        <h2 class="h4 mb-0">Simulasi Parkir Otomatis</h2>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6 mb-4 mb-md-0">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <h3 class="h5 mb-0">Status Area Parkir</h3>
+                    </div>
+                    <div class="card-body text-center">
+                        <div class="demo-grid mb-3">
+                            {% for i in range(3) %}
+                                {% for j in range(3) %}
+                                    {% if loop.index0 % 3 == 0 and loop.index0 != 0 %}<br>{% endif %}
+                                    <div class="grid-cell 
+                                        {% if (i, j) in [(0,0), (0,2), (2,0), (2,2)] %} 
+                                            {% if grid[i][j] == 'X' %}occupied-slot{% else %}parking-slot{% endif %}
+                                        {% else %}
+                                            path-cell
+                                        {% endif %}
+                                        {% if grid[i][j] == 'A' %} agent-cell {% endif %}">
+                                        {{ grid[i][j] }}
+                                    </div>
+                                {% endfor %}
+                            {% endfor %}
+                        </div>
+                        <p class="mb-0">
+                            <strong>Total Reward:</strong> {{ total_reward }} |
+                            <strong>Langkah:</strong> {{ steps }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h3 class="h5 mb-0">Riwayat Aksi</h3>
+                    </div>
+                    <div class="card-body demo-history">
+                        {% for step in history %}
+                            <div class="history-item {% if loop.first %}active{% endif %}">
+                                <h5 class="mb-2">Langkah {{ step.step }}: <span class="badge bg-primary">{{ step.action }}</span></h5>
+                                <p class="mb-2">Reward: <strong>{{ step.reward }}</strong></p>
+                                
+                                <div class="grid-visualization">
+                                    {% for row in step.grid %}
+                                        {% for cell in row %}{{ cell }}{% endfor %}<br>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header bg-warning">
+        <h2 class="h4 mb-0">Analisis Demonstrasi</h2>
+    </div>
+    <div class="card-body">
+        <p>Demonstrasi ini menunjukkan bagaimana agen menerapkan kebijakan optimal yang dipelajari untuk parkir otomatis. Berikut analisis kinerjanya:</p>
+        
+        <ul class="mb-4">
+            <li><strong>Efisiensi Rute:</strong> Agen mengambil rute terpendek untuk mencapai slot parkir kosong terdekat dari posisi awalnya.</li>
+            <li><strong>Keputusan Optimal:</strong> Di setiap langkah, agen memilih aksi dengan nilai Q tertinggi berdasarkan kebijakan yang dipelajari.</li>
+            <li><strong>Penanganan Tabrakan:</strong> Agen menghindari batas area parkir dan tidak mencoba parkir di slot yang sudah terisi.</li>
+            <li><strong>Maximalisasi Reward:</strong> Dengan reward +10 untuk parkir berhasil dan penalty untuk langkah tambahan, agen dioptimalkan untuk mencapai tujuan dengan efisien.</li>
+        </ul>
+        
+        <div class="alert alert-info">
+            <strong>Insight:</strong> Total reward sebesar <strong>{{ total_reward }}</strong> setelah <strong>{{ steps }}</strong> langkah menunjukkan performa yang sangat baik. Reward maksimal yang mungkin dicapai adalah 10 (parkir berhasil), dikurangi penalty untuk setiap langkah (-1 per langkah). 
+            Sebagai perbandingan, rute optimal minimum membutuhkan 2 langkah dari posisi tengah ke slot terdekat, sehingga reward optimal adalah 10 - 2 = 8.
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-4 mb-md-0">
+        <div class="card h-100">
+            <div class="card-header bg-secondary text-white">
+                <h3 class="h5 mb-0">Jalankan Simulasi Baru</h3>
+            </div>
+            <div class="card-body d-flex flex-column justify-content-center">
+                <p class="mb-3">Status slot parkir akan diacak ulang untuk simulasi berikutnya.</p>
+                <a href="/demo" class="btn btn-secondary w-100 py-2">
+                    <i class="bi bi-arrow-repeat me-1"></i>Simulasi Baru
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header bg-info text-white">
+                <h3 class="h5 mb-0">Visualisasi Kebijakan</h3>
+            </div>
+            <div class="card-body d-flex flex-column justify-content-center">
+                <p class="mb-3">Lihat keseluruhan kebijakan optimal yang dipelajari oleh agen.</p>
+                <a href="/policy" class="btn btn-info w-100 py-2">
+                    <i class="bi bi-diagram-3 me-1"></i>Lihat Kebijakan Penuh
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

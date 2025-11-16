@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}Pelatihan Model - Sistem Parkir Otomatis{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Pelatihan Model Q-Learning</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h2 class="h4 mb-0">Parameter Pelatihan</h2>
+            </div>
+            <div class="card-body">
+                <form id="training-form">
+                    <div class="mb-3">
+                        <label for="episodes" class="form-label">Jumlah Episode</label>
+                        <input type="number" class="form-control" id="episodes" name="episodes" value="1000" min="100" max="5000" required>
+                        <small class="text-muted">Jumlah iterasi pembelajaran (100-5000)</small>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="alpha" class="form-label">Learning Rate (α)</label>
+                            <input type="number" class="form-control" id="alpha" name="alpha" value="0.9" step="0.1" min="0.1" max="1.0" required>
+                            <small class="text-muted">Seberapa cepat model belajar (0.1-1.0)</small>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="gamma" class="form-label">Discount Factor (γ)</label>
+                            <input type="number" class="form-control" id="gamma" name="gamma" value="0.9" step="0.1" min="0.1" max="0.99" required>
+                            <small class="text-muted">Pentingnya reward masa depan (0.1-0.99)</small>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label for="epsilon" class="form-label">Epsilon Awal</label>
+                            <input type="number" class="form-control" id="epsilon" name="epsilon" value="1.0" step="0.1" min="0.1" max="1.0" required>
+                            <small class="text-muted">Tingkat eksplorasi awal (0.1-1.0)</small>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="min_epsilon" class="form-label">Epsilon Minimum</label>
+                            <input type="number" class="form-control" id="min_epsilon" name="min_epsilon" value="0.01" step="0.01" min="0.01" max="0.5" required>
+                            <small class="text-muted">Tingkat eksplorasi minimum (0.01-0.5)</small>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="decay_rate" class="form-label">Decay Rate</label>
+                        <input type="number" class="form-control" id="decay_rate" name="decay_rate" value="0.005" step="0.001" min="0.001" max="0.01" required>
+                        <small class="text-muted">Kecepatan pengurangan eksplorasi (0.001-0.01)</small>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary w-100 py-2">
+                        <i class="bi bi-play-circle me-2"></i>Mulai Pelatihan
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h3 class="h5 mb-0">Tentang Hiperparameter</h3>
+            </div>
+            <div class="card-body">
+                <p><strong>Learning Rate (α)</strong>: Mengatur seberapa besar pembaruan nilai Q pada setiap langkah. Nilai tinggi berarti pembelajaran lebih cepat tetapi mungkin kurang stabil.</p>
+                <p><strong>Discount Factor (γ)</strong>: Menentukan seberapa penting reward di masa depan dibandingkan reward instan. Nilai tinggi membuat agen lebih visioner.</p>
+                <p><strong>Epsilon (ε)</strong>: Mengontrol keseimbangan antara eksplorasi (mencoba aksi baru) dan eksploitasi (menggunakan pengetahuan yang ada). Akan berkurang seiring waktu.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h2 class="h4 mb-0">Hasil Pelatihan</h2>
+            </div>
+            <div class="card-body">
+                <div id="training-result" class="d-none">
+                    <div class="alert alert-success">
+                        <h4 class="alert-heading">✅ Pelatihan Berhasil!</h4>
+                        <p>Rata-rata reward akhir: <strong><span id="final-reward"></span></strong></p>
+                        <p>Model telah disimpan dan siap untuk digunakan pada halaman demo dan visualisasi.</p>
+                    </div>
+                    
+                    <div class="text-center mb-4">
+                        <h3 class="mb-3">Kurva Pembelajaran</h3>
+                        <img id="learning-curve" class="img-fluid rounded shadow" src="" alt="Kurva Pembelajaran">
+                    </div>
+                    
+                    <div class="mt-3 text-center">
+                        <a href="/policy" class="btn btn-primary me-2">
+                            <i class="bi bi-eye me-1"></i>Lihat Kebijakan Optimal
+                        </a>
+                        <a href="/demo" class="btn btn-info">
+                            <i class="bi bi-play-circle me-1"></i>Demonstrasi
+                        </a>
+                    </div>
+                </div>
+                
+                <div id="initial-instructions" class="text-center py-4">
+                    <div class="mb-4">
+                        <i class="bi bi-info-circle fs-1 text-primary"></i>
+                    </div>
+                    <h3 class="mb-3">Siap untuk Melatih Model</h3>
+                    <p class="text-muted mb-4">Atur parameter di sebelah kiri dan klik tombol "Mulai Pelatihan" untuk memulai proses pembelajaran Q-Learning.</p>
+                    <div class="alert alert-light border">
+                        <strong>Catatan:</strong> Waktu pelatihan bervariasi tergantung parameter. 
+                        Untuk 1000 episode dengan konfigurasi default, diperkirakan sekitar 15-30 detik.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

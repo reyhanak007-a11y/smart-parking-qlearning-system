@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Sistem Parkir Otomatis dengan Q-Learning{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/script.js"></script>
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">Sistem Parkir Otomatis RL</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="/">Beranda</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/train' %}active{% endif %}" href="/train">Pelatihan Model</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/policy' %}active{% endif %}" href="/policy">Kebijakan Optimal</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/demo' %}active{% endif %}" href="/demo">Demonstrasi</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/hyperparam_experiment' %}active{% endif %}" href="/hyperparam_experiment">Eksperimen Hiperparameter</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="loading-overlay">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <div class="loading-text">Sedang memproses...</div>
+    </div>
+
+    <main class="container my-4">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="bg-light py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-0">© 2025 Sistem Parkir Otomatis dengan Q-Learning. Mata Kuliah Pembelajaran Mesin.</p>
+            <p class="mb-0">Dosen Pengampu: Mohammad Bayu Anggara, S.Kom., M.Kom.</p>
+        </div>
+    </footer>
+</body>
+</html>

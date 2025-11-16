@@ -1,0 +1,6 @@
+{
+    "state_size": 144,
+    "action_size": 5,
+    "training_date": "2025-11-15 12:56:00",
+    "algorithm": "Q-Learning"
+}
